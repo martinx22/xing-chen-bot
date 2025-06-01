@@ -38,14 +38,18 @@ def add_message(chat_id, role, content):
 def get_chatgpt_reply(chat_id, user_input):
     memory = load_memory(chat_id)
     add_message(chat_id, "user", user_input)
+from openai import OpenAI
 
-    response = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo",
-        messages=memory
-    )
-    reply = response.choices[0].message["content"]
-    add_message(chat_id, "assistant", reply)
-    return reply
+client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
+
+response = client.chat.completions.create(
+    model="gpt-3.5-turbo",
+    messages=[
+        {"role": "user", "content": user_input}
+    ]
+)
+reply = response.choices[0].message.content
+
 
 # Telegram webhook 接口
 @app.route('/webhook', methods=['POST'])
