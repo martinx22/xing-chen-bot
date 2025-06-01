@@ -12,7 +12,8 @@ TELEGRAM_API_URL = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessag
 
 # 获取记忆文件路径
 def get_memory_file(chat_id):
-    return f"memory_{chat_id}.json"
+    return f"/mnt/data/memory_{chat_id}.json"
+
 
 # 读取记忆
 def load_memory(chat_id):
