@@ -27,18 +27,23 @@ def load_memory(chat_id):
 def save_memory(chat_id, memory):
     filename = get_memory_file(chat_id)
     with open(filename, "w", encoding="utf-8") as f:
-        json.dump(memory[-20:], f, ensure_ascii=False, indent=2)
+        json.dump(memory[-100:], f, ensure_ascii=False, indent=2)
 
 # 添加一条对话记录
 def add_message(chat_id, role, content):
     memory = load_memory(chat_id)
     memory.append({"role": role, "content": content})
     save_memory(chat_id, memory)
+    print(f"[Memory] {role} 说：{content}")
+
 
 # 与 OpenAI 对话
 def get_chatgpt_reply(chat_id, user_input):
     memory = load_memory(chat_id)
     add_message(chat_id, "user", user_input)
+    print("🧠 当前 chat_id:", chat_id)
+    print("🧠 当前记忆:", memory)
+
 
     from openai import OpenAI
     import os
