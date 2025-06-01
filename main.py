@@ -39,6 +39,8 @@ def add_message(chat_id, role, content):
 def get_chatgpt_reply(chat_id, user_input):
     memory = load_memory(chat_id)
     add_message(chat_id, "user", user_input)
+    add_message(chat_id, "assistant", reply)
+
 
     from openai import OpenAI
     import os
