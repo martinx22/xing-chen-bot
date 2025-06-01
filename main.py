@@ -39,22 +39,24 @@ def add_message(chat_id, role, content):
 def get_chatgpt_reply(chat_id, user_input):
     memory = load_memory(chat_id)
     add_message(chat_id, "user", user_input)
-    add_message(chat_id, "assistant", reply)
-
 
     from openai import OpenAI
     import os
 
-    client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
+    try:
+        client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
 
-    response = client.chat.completions.create(
-        model="gpt-3.5-turbo",
-        messages=[
-            {"role": "user", "content": user_input}
-        ]
-    )
+        response = client.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {"role": "user", "content": user_input}
+            ]
+        )
+        reply = response.choices[0].message.content
+    except Exception as e:
+        reply = "抱歉，我暂时无法获取回应 😢"
+        print(f"[OpenAI ERROR] {e}")
 
-    reply = response.choices[0].message.content
     add_message(chat_id, "assistant", reply)
     return reply
 
